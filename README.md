@@ -1,5 +1,5 @@
 Fallout Device project.
-Fallout Device is a PCB made for LARP «Fallout Alpha'n'Omega» in 2014 to make radiation model possible. It has STM32 microcontroller, radio CC1101, one AA battery, one RGB LED, one connector for special microflash called «pill», no buttons and no switches
+Fallout Device is a PCB made for LARP «Fallout Alpha'n'Omega» in 2014 to make radiation model possible. It has STM32 microcontroller, radio CC1101, one AA battery, one RGB LED, one connector for special microflash called «pill» (see Pill folder), no buttons and no switches
 
 View this project on [CADLAB.io](https://cadlab.io/project/1101). 
 
