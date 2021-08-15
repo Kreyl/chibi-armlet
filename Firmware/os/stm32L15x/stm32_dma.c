@@ -525,7 +525,7 @@ const stm32_dma_stream_t *dmaStreamAllocI(uint32_t id,
                                           uint32_t priority,
                                           stm32_dmaisr_t func,
                                           void *param) {
-  uint32_t i, startid, endid;
+  uint32_t i, startid=0, endid=0;
 
   osalDbgCheckClassI();
 

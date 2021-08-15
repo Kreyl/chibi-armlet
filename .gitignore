@@ -38,3 +38,4 @@ Pill/Pill2/Pill2.ses
 Pill/Pill3.kicad_pcb-bak
 Firmware/Basic/.settings/language.settings.xml
 Firmware/FalloutDevice-cppcheck-build-dir/
+*.xml
