@@ -1,7 +1,7 @@
 /*
  * Sequences.h
  *
- *  Created on: 09 ÿíâ. 2015 ã.
+ *  Created on: 09 ï¿½ï¿½ï¿½. 2015 ï¿½.
  *      Author: Kreyl
  */
 
@@ -195,19 +195,6 @@ const LedChunk_t lsqBlinkGreenX2[] = {
 #define clMany          clCyan
 #define SWITCH_TIME     720
 
-const LedRGBChunk_t lsqStart0[] = {
-        {csSetup, 0, clBlue},
-        {csWait, 99},
-        {csSetup, 0, clBlack},
-        {csEnd}
-};
-
-const LedRGBChunk_t lsqStart[] = {
-        {csSetup, 0, clGreen},
-        {csWait, 99},
-        {csSetup, 0, clBlack},
-        {csEnd}
-};
 
 const LedRGBChunk_t lsqFailure[] = {
         {csSetup, 0, clRed},
@@ -235,11 +222,6 @@ const LedRGBChunk_t lsqOnPillConnect[] = {
         {csSetup, 0, clGreen},
         {csWait, 450},
         {csSetup, 0, clBlack},
-        {csEnd},
-};
-
-const LedRGBChunk_t lsqLightOn[] = {
-        {csSetup, 0, clWhite},
         {csEnd},
 };
 

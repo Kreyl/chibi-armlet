@@ -1,7 +1,7 @@
 /*
  * board.h
  *
- *  Created on: 12 сент. 2015 г.
+ *  Created on: 12 пїЅпїЅпїЅпїЅ. 2015 пїЅ.
  *      Author: Kreyl
  */
 
@@ -9,7 +9,7 @@
 
 // ==== General ====
 #define BOARD_NAME          "Fallout"
-#define APP_NAME            "HeartOfStorm"
+#define APP_NAME            "MagicPathEnSafe"
 
 // ==== High-level peripery control ====
 #define PILL_ENABLED        FALSE

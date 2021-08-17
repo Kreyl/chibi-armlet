@@ -706,7 +706,7 @@ extern void PrintfC(const char *format, ...);
 
 
 #define CH_CFG_SYSTEM_HALT_HOOK(reason) {                                   \
-        PrintfC("\r\nHalt: %S\r\n", reason);                         \
+        /*PrintfC("\rHalt: %S: %S", reason, message);*/                         \
 }
 
 /**

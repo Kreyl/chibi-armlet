@@ -56,72 +56,13 @@ static inline void Lvl250ToLvl1000(uint16_t *PLvl) {
 #endif
 
 #if 1 // =========================== Pkt_t =====================================
-
-enum RCmd_t : uint8_t {
-    rcmdNone = 0,
-    rcmdPing = 1,
-    rcmdPong = 2,
-    rcmdBeacon = 3,
-    rcmdScream = 4,
-    rcmdLustraParams = 5,
-    rcmdLocketSetParam = 6,
-    rcmdLocketGetParam = 7,
-    rcmdLocketExplode = 8,
-    rcmdLocketDieAll = 9,
-    rcmdLocketDieChoosen = 10,
-};
-
 struct rPkt_t {
-    uint16_t From;  // 2
-    uint16_t To;    // 2
-    uint16_t TransmitterID; // 2
-    RCmd_t Cmd; // 1
-    uint8_t PktID; // 1
-    union {
-        struct {
-            uint16_t MaxLvlID;
-            uint8_t Reply;
-        } __attribute__ ((__packed__)) Pong; // 3
-
-        struct {
-            int8_t RssiThr;
-            uint8_t Damage;
-            uint8_t Power;
-        } __attribute__ ((__packed__)) Beacon; // 3
-
-        struct {
-            uint8_t Power;
-            int8_t RssiThr;
-            uint8_t Damage;
-        } __attribute__ ((__packed__)) LustraParams; // 3
-
-        struct {
-            uint8_t ParamID;
-            uint16_t Value;
-        } __attribute__ ((__packed__)) LocketParam; // 3
-
-        struct {
-            int8_t RssiThr;
-        } __attribute__ ((__packed__)) Die; // 1
-    } __attribute__ ((__packed__)); // union
-    rPkt_t& operator = (const rPkt_t &Right) {
-        From = Right.From;
-        To = Right.To;
-        TransmitterID = Right.TransmitterID;
-        Cmd = Right.Cmd;
-        PktID = Right.PktID;
-        // Payload
-        Pong.MaxLvlID = Right.Pong.MaxLvlID;
-        Pong.Reply = Right.Pong.Reply;
-        return *this;
-    }
+    uint8_t ID;
+    uint32_t TheWord;
 } __attribute__ ((__packed__));
-
-#define PKTID_DO_NOT_RETRANSMIT 0
-#define PKTID_TOP_VALUE         254
 #endif
 
-#define RPKT_LEN                sizeof(rPkt_t)
+#define RPKT_LEN    sizeof(rPkt_t)
 
 // Message queue
 #define R_MSGQ_LEN      4 // Length of q
@@ -227,34 +168,12 @@ public:
 };
 #endif
 
-class RxData_t {
-public:
-    int32_t Cnt;
-    int32_t Summ;
-    int32_t Threshold;
-    bool ProcessAndCheck() {
-        bool Rslt = false;
-        if(Cnt >= 3L) {
-            Summ /= Cnt;
-            if(Summ >= Threshold) Rslt = true;
-        }
-        Cnt = 0;
-        Summ = 0;
-        return Rslt;
-    }
-};
-
-#define LUSTRA_CNT      50
-#define LUSTRA_MIN_ID   1000
-#define LUSTRA_MAX_ID   (LUSTRA_MIN_ID + LUSTRA_CNT - 1)
-
 class rLevel1_t {
 public:
     EvtMsgQ_t<RMsg_t, R_MSGQ_LEN> RMsgQ;
     rPkt_t PktRx, PktTx;
 //    bool MustTx = false;
     int8_t Rssi;
-    RxData_t RxData[LUSTRA_CNT];
     uint8_t Init();
     // Inner use
     void TryToSleep(uint32_t SleepDuration);
@@ -267,5 +186,3 @@ public:
     void TaskFeelEachOtherSingle();
     void TaskFeelEachOtherMany();
 };
-
-extern rLevel1_t Radio;

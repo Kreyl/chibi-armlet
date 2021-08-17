@@ -459,7 +459,7 @@ void PrintErrMsg(const char* S) {
     USART1->CR3 &= ~USART_CR3_DMAT;
     while(*S != 0) {
 //        ITM_SendChar(*S++);
-#if defined STM32L1XX || defined STM32F2XX
+#if defined STM32L1XX
         while(!(USART1->SR & USART_SR_TXE));
         USART1->DR = *S;
 #else
@@ -908,7 +908,6 @@ uint32_t Read32(uint32_t Addr) {
 
 uint8_t Write32(uint32_t Addr, uint32_t W) {
     Addr += EEPROM_BASE_ADDR;
-    if(*((uint32_t*)(Addr)) == W) return retvOk;
 //    Uart.Printf("EAdr=%u\r", Addr);
     Flash::UnlockEEAndPECR();
     // Wait for last operation to be completed
@@ -1216,7 +1215,7 @@ uint8_t TryStrToFloat(char* S, float *POutput) {
 }; // namespace
 #endif
 
-#if IWDG_ENABLED // =========================== IWDG ===========================
+#if 1 // =========================== IWDG ===========================
 namespace Iwdg {
 enum Pre_t {
     iwdgPre4 = 0x00,
@@ -2183,9 +2182,6 @@ void Clk_t::SetCoreClk(CoreClk_t CoreClk) {
     // Setup dividers
     switch(CoreClk) {
         case cclk8MHz:
-        case cclk12MHz:
-        case cclk64MHz:
-        case cclk80MHz:
             break;
         // Setup PLL (must be disabled first)
         case cclk16MHz:
@@ -2673,7 +2669,7 @@ void Spi_t::Setup(BitOrder_t BitOrder, CPOL_t CPOL, CPHA_t CPHA,
     if(CPHA == cphaSecondEdge) PSpi->CR1 |= SPI_CR1_CPHA;   // CPHA
     // Baudrate
     int32_t div;
-#if defined STM32L1XX || defined STM32F4XX || defined STM32F2XX || defined STM32L4XX
+#if defined STM32L1XX || defined STM32F4XX || defined STM32L4XX
     if(PSpi == SPI1) div = Clk.APB2FreqHz / Bitrate_Hz;
     else div = Clk.APB1FreqHz / Bitrate_Hz;
 #elif defined STM32F030 || defined STM32F0

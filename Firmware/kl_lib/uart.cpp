@@ -227,6 +227,7 @@ uint8_t BaseUart_t::IPutByteNow(uint8_t b) {
 #endif // TX
 
 #if 1 // ==== RX ====
+
 uint8_t BaseUart_t::GetByte(uint8_t *b) {
 #if defined STM32F2XX || defined STM32F4XX
     int32_t WIndx = UART_RXBUF_SZ - Params->PDmaRx->stream->NDTR;
