@@ -5,7 +5,8 @@
  *      Author: kreyl
  */
 
-#pragma once
+#ifndef RADIO_LVL1_H__
+#define RADIO_LVL1_H__
 
 #include "kl_lib.h"
 #include "ch.h"
@@ -56,13 +57,29 @@ static inline void Lvl250ToLvl1000(uint16_t *PLvl) {
 #endif
 
 #if 1 // =========================== Pkt_t =====================================
-struct rPkt_t {
-    uint8_t ID;
-    uint32_t TheWord;
-} __attribute__ ((__packed__));
+#pragma pack(push, 1)
+union rPkt_t {
+    uint32_t DW32[2];
+    struct {
+        uint8_t ID; // Required to distinct packets from same src
+        uint8_t TimeSrc;
+        uint8_t HopCnt;
+        uint16_t iTime;
+        // Payload
+        int8_t Rssi; // Will be set after RX. Transmitting is useless, but who cares.
+        uint16_t Salt;
+    };
+    rPkt_t& operator = (const rPkt_t &Right) {
+        DW32[0] = Right.DW32[0];
+        DW32[1] = Right.DW32[1];
+        return *this;
+    }
+};
+#pragma pack(pop)
 #endif
 
 #define RPKT_LEN    sizeof(rPkt_t)
+#define RPKT_SALT   0xCA11
 
 // Message queue
 #define R_MSGQ_LEN      4 // Length of q
@@ -186,3 +203,5 @@ public:
     void TaskFeelEachOtherSingle();
     void TaskFeelEachOtherMany();
 };
+
+#endif //RADIO_LVL1_H__

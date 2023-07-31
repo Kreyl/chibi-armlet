@@ -5,7 +5,8 @@
  * Created on 7 Март 2010 г., 12:42
  */
 
-#pragma once
+#ifndef CC1101_RF_SETTINGS_H__
+#define CC1101_RF_SETTINGS_H__
 
 // All this is for 27.0 MHz crystal, and for 868 MHz carrier
 
@@ -225,3 +226,5 @@
 #define CC_SYNC0_VALUE      0x91
 
 #define CC_CHANNR_VALUE     0x00        // Channel number.
+
+#endif //CC1101_RF_SETTINGS_H__

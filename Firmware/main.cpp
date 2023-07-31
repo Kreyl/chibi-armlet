@@ -22,7 +22,7 @@ cc1101_t CC(CC_Setup0);
 int8_t Rssi;
 //void ReadEE();
 
-#define THE_COLOR   (Color_t){255, 72, 0}
+#define THE_COLOR   (Color_t){255, 0, 255}
 
 LedRGBChunk_t lsqOn[] =  { {csSetup, 450, THE_COLOR},  {csEnd} };
 LedRGBChunk_t lsqOff[] = { {csSetup, 450, clBlack},  {csEnd} };
@@ -34,7 +34,7 @@ LedRGBChunk_t lsqStart[] = {
 };
 
 rPkt_t PktRx;
-uint32_t RxPeriod = 720, RxDuration = 117;
+uint32_t RxPeriod = 999, RxDuration = 153;
 
 LedRGB_t Led { LED_R_PIN, LED_G_PIN, LED_B_PIN };
 Beeper_t Beeper {BEEPER_PIN};
@@ -55,7 +55,8 @@ int main(void) {
     Led.Init();
     if(!Sleep::WasInStandby()) {
         Printf("\r%S %S\rClr=%02X%02X%02X; Period=%u; Duration=%u\r",
-                APP_NAME, XSTRINGIFY(BUILD_TIME), lsqOn[0].Color.R, lsqOn[0].Color.G, lsqOn[0].Color.B,
+                APP_NAME, XSTRINGIFY(BUILD_TIME),
+                lsqOn[0].Color.R, lsqOn[0].Color.G, lsqOn[0].Color.B,
                 RxPeriod, RxDuration);
         Clk.PrintFreqs();
     }
@@ -64,7 +65,8 @@ int main(void) {
         if(!Sleep::WasInStandby()) { // Show CC is ok
             Led.StartOrRestart(lsqStart);
             // Try to receive Cmd by UART
-            for(int i=0; i<27; i++) {
+            int i = 0;
+            while(i++ < 27) {
                 chThdSleepMilliseconds(99);
                 uint8_t b;
                 while(Uart.GetByte(&b) == retvOk) {
@@ -78,16 +80,14 @@ int main(void) {
 
         // CC params
         CC.SetPktSize(RPKT_LEN);
-        CC.SetChannel(0);
+        CC.SetChannel(2);
 
         int32_t RxTryCnt = 0;
         while(true) {
             CC.Recalibrate();
             if(CC.Receive(RxDuration, &PktRx, RPKT_LEN, &Rssi) == retvOk) {
-                Printf("Rx TheWord=%X; Rssi=%d\r", PktRx.TheWord, Rssi);
-                if(PktRx.TheWord == 0x5A110BE1 and Rssi > -99
-
-                ) {
+                Printf("Rx iD=%d; Rssi=%d\r", PktRx.ID, Rssi);
+                if(PktRx.Salt == RPKT_SALT) {
                     RxTryCnt = 4;
                     Led.StartOrContinue(lsqOn);
                 }
